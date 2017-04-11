@@ -10,11 +10,14 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.View;
 
 import com.example.android.todolistfirebase.model.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Array;
@@ -27,6 +30,10 @@ public class MainActivity extends AppCompatActivity implements
     private RecyclerView mTaskList;
 
     private ArrayList<Task> getTasks;
+
+    static final int PICK_ADD_TASK_REQUEST = 1;
+
+    DatabaseReference databaseTasks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements
         mTaskList.setLayoutManager(layoutManager);
 
         mTaskList.setHasFixedSize(true);
+
+        databaseTasks = FirebaseDatabase.getInstance().getReference("tasks");
 
         FloatingActionButton fabButton = (FloatingActionButton) findViewById(R.id.fab);
         fabButton.setOnClickListener(new FabButtonClickListener());
@@ -59,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 String id = (String) viewHolder.itemView.getTag();
 
-                AddTaskActivity.databaseTasks.child(id).removeValue();
+                databaseTasks.child(id).removeValue();
                 getSupportLoaderManager().restartLoader(0, null, MainActivity.this);
 
             }
@@ -69,13 +78,13 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
+
+
     @Override
     protected void onStart() {
         super.onStart();
 
-
-
-        AddTaskActivity.databaseTasks.addValueEventListener(new ValueEventListener() {
+        databaseTasks.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 

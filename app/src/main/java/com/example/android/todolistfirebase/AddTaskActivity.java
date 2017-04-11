@@ -21,7 +21,7 @@ public class AddTaskActivity extends AppCompatActivity {
     EditText mEditTextDesc;
     Spinner mSpinner;
 
-    public static DatabaseReference databaseTasks = FirebaseDatabase.getInstance().getReference("tasks");
+    DatabaseReference databaseTasks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +31,8 @@ public class AddTaskActivity extends AppCompatActivity {
         mAddButton = (Button) findViewById(R.id.addButton);
         mEditTextDesc = (EditText) findViewById(R.id.editTextTaskDescription);
         mSpinner = (Spinner) findViewById(R.id.spinner);
+
+        databaseTasks = FirebaseDatabase.getInstance().getReference("tasks");
 
         // Fill spinner with values
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.priorities_array, android.R.layout.simple_spinner_item);

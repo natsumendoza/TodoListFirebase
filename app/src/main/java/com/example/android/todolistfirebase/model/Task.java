@@ -2,7 +2,6 @@ package com.example.android.todolistfirebase.model;
 
 
 import java.io.Serializable;
-import java.util.HashMap;
 
 /**
  * Created by Jay-Ar Gabriel on 4/10/2017.
